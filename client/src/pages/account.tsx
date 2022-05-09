@@ -6,13 +6,14 @@ import "./css/account.css";
 
 const AccountPage = () => {
   const [ SAPIKEY, setSAPIKEY ] = React.useState<string>("");
+  const [ SAPIPW, setSAPIPW ] = React.useState<string>("");
   const [ NBalance, setNBalance ] = React.useState<number | "Not Authorized">("Not Authorized");
   const [ NTransaction, setNTransaction ] = React.useState<number | ''>(0);
 
   const getAccountInformation = () => {
     const asyncFun = async() => {
       interface IAPIResponse { balance: number };
-      const { data } = await axios.post<IAPIResponse>(SAPIBase + '/account/getInfo', { credential: SAPIKEY });
+      const { data } = await axios.post<IAPIResponse>(SAPIBase + '/account/getInfo', { credential: SAPIKEY , password: SAPIPW});
       setNBalance(data.balance);
     }
     asyncFun().catch((e) => window.alert(`AN ERROR OCCURED: ${e}`));
@@ -40,7 +41,8 @@ const AccountPage = () => {
       <Header/>
       <h2>Account</h2>
       <div className={"account-token-input"}>
-        Enter API Key: <input type={"text"} value={SAPIKEY} onChange={e => setSAPIKEY(e.target.value)}/>
+        Enter API Key: <input type={"text"} value={SAPIKEY} onChange={e => setSAPIKEY(e.target.value)}/><p></p>
+        Enter API Password: <input type={"password"} value={SAPIPW} onChange={e => setSAPIPW(e.target.value)}/><p></p>
         <button onClick={e => getAccountInformation()}>GET</button>
       </div>
       <div className={"account-bank"}>
