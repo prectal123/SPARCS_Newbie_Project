@@ -30,6 +30,16 @@
     font-weight: 700;
 }
 
+.modify-item{
+    color: blue;
+    font-size: 10px;
+}
+
+.modify-item:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .delete-item {
     position: absolute;
     right: 15px;

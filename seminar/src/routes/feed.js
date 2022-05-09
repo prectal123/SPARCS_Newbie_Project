@@ -54,6 +54,18 @@ class FeedDB {
             return false;
         }
     }
+
+    modifyItem = async (item) => {
+        const { idm, titlem, contentm } = item;
+        try{
+            const ModifyFilter = { _id: idm };
+            const res = await FeedModel.updateOne(ModifyFilter, { $set: { title: titlem, content: contentm }});
+            return true;
+        } catch (e) {
+            console.log(`[Feed-DB] Modify Error: ${ e }`);
+            return false;
+        }
+    }
 }
 
 const feedDBInst = FeedDB.getInst();
@@ -89,6 +101,17 @@ router.post('/deleteFeed', async (req, res) => {
         else return res.status(200).json({ isOK: true });
     } catch (e) {
         return res.status(500).json({ error: e });
+    }
+})
+
+router.post('/modifyFeed', async (req, res) => {
+    try{
+        const { idm, titlem, contentm } = req.body;
+        const modifyResult = await feedDBInst.modifyItem({idm, titlem, contentm});
+        if(!modifyResult) return res.status(500).json({error: "No item modified"})
+        else return res.status(200).json({isOK: true});
+    } catch (e) { 
+        return res.status(500).json({error: e});
     }
 })
 

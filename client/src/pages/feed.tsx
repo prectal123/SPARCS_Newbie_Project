@@ -12,6 +12,10 @@ const FeedPage = (props: {}) => {
   const [ SNewPostTitle, setSNewPostTitle ] = React.useState<string>("");
   const [ SNewPostContent, setSNewPostContent ] = React.useState<string>("");
   const [ SSearchItem, setSSearchItem ] = React.useState<string>("");
+  const [ SModify, setSModify ] = React.useState<boolean>(false);
+  const [ IDModify, setIDModify ] = React.useState<string>("");
+  const [ ModificationContent, setModificationContent ] = React.useState<string>("");
+  const [ ModificationTitle, setModificationTitle ] = React.useState<string>("");
 
   React.useEffect( () => {
     let BComponentExited = false;
@@ -24,7 +28,7 @@ const FeedPage = (props: {}) => {
     };
     asyncFun().catch((e) => window.alert(`Error while running API Call: ${e}`));
     return () => { BComponentExited = true; }
-  }, [ NPostCount, SSearchItem ]);
+  }, [ NPostCount, SSearchItem, IDModify ]);
 
   const createNewPost = () => {
     const asyncFun = async () => {
@@ -36,6 +40,28 @@ const FeedPage = (props: {}) => {
     asyncFun().catch(e => window.alert(`AN ERROR OCCURED! ${e}`));
   }
 
+  const SelectModPost = (id: string, title: string, content: string) => {
+    const asyncFun = async () => {
+    setSModify(true);
+    setModificationContent(content);
+    setModificationTitle(title);
+    setIDModify(id);
+    }
+    asyncFun().catch(e => window.alert(`AN ERROR OCCURED! ${e}`));
+  }
+
+  const ModifyPost = () => {
+    const asyncFun = async () => {
+      await axios.post( SAPIBase + '/feed/modifyFeed', { idm: IDModify, titlem: ModificationTitle, contentm : ModificationContent } );
+      console.log(ModificationTitle);
+      setSModify(false);
+      setIDModify("");
+      setModificationContent("");
+      setModificationTitle("");
+    }
+    asyncFun().catch(e => window.alert(`AN ERROR OCCURED! ${e}`));
+  }
+
   const deletePost = (id: string) => {
     const asyncFun = async () => {
       // One can set X-HTTP-Method header to DELETE to specify deletion as well
@@ -43,6 +69,15 @@ const FeedPage = (props: {}) => {
       setNPostCount(Math.max(NPostCount - 1, 0));
     }
     asyncFun().catch(e => window.alert(`AN ERROR OCCURED! ${e}`));
+  }
+
+  const conditionalMod = () => {
+    if(SModify) return (<div><p></p><div className={"feed-item-modify"}>
+    Modified Title: <input type={"text"} value={ModificationTitle} onChange={(e) => setModificationTitle(e.target.value)}/>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      Content: <input type={"text"} value={ModificationContent} onChange={(e) => setModificationContent(e.target.value)}/>
+      <div className={"post-add-button"} onClick={(e) => ModifyPost()}>Change Post!</div>
+      </div></div>); else return (<div></div>);
   }
 
   return (
@@ -61,13 +96,21 @@ const FeedPage = (props: {}) => {
                onChange={ (e) => setSSearchItem( e.target.value ) }
         />
       </div>
+        
+      <div>
+        {conditionalMod()}
+      </div>
+
       <div className={"feed-list"}>
-        { LAPIResponse.map( (val, i) =>
+        { 
+        LAPIResponse.map( (val, i) =>
           <div key={i} className={"feed-item"}>
             <div className={"delete-item"} onClick={(e) => deletePost(`${val._id}`)}>ⓧ</div>
             <h3 className={"feed-title"}>{ val.title }</h3>
             <p className={"feed-body"}>{ val.content }</p>
+            <div className={"modify-item"} onClick={(e) => SelectModPost(`${val._id}`, `${val.title}`, `${val.content}`)}>수정</div>
           </div>
+
         ) }
         <div className={"feed-item-add"}>
           Title: <input type={"text"} value={SNewPostTitle} onChange={(e) => setSNewPostTitle(e.target.value)}/>
