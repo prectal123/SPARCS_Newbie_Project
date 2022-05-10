@@ -1,5 +1,17 @@
-const authMiddleware = (req, res, next) => {
-    if (req.body.credential === process.env.API_KEY && req.body.password === process.env.API_PW) {
+const AccountModel = require("../models/account");
+
+const Authorization = async ({key, pw}) => {
+    const res = await AccountModel.findOne({Key: key});
+    if(res === null) {console.log("Unauthorized"); return false;} else {
+        const respw = await AccountModel.findOne({Key: key, PW: pw});
+        if(respw === null) {console.log("Unauthorized"); return false;} else {return true;}
+    }
+}  
+
+const authMiddleware = async (req, res, next) => {
+    const login = await Authorization({key: req.body.credential, pw: req.body.password});
+    console.log(login);
+    if (login) {
         console.log("[AUTH-MIDDLEWARE] Authorized User");
         next();
     }
