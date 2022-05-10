@@ -43,31 +43,36 @@ class BankDB {
             return false; }
     }
 
-    getBalance = () => {
-        return { success: true, data: this.#total };
+    getBalance = async ({ key, pw}) => {
+        const res = await AccountModel.findOne({Key: key});
+
+        return { success: true, data: res.Money };
     }
 
-    transaction = ( amount ) => {
-        this.#total += amount; 
-        return { success: true, data: this.#total };
+    transaction = async ( {key, pw, amount} ) => {
+        var blah = {success: false, data: 0};
+        console.log("key : " + key);
+        const find = await AccountModel.findOne({Key: key});
+        const larger = find.Money;
+        const res = await AccountModel.updateOne({Key: key}, {$set: {Money: ( larger+amount )}});
+        blah = { success: true, data: larger + amount }
+        return blah;
     }
 }
 
 const bankDBInst = BankDB.getInst();
 
-bankDBInst.deleteRegister({key: "miru"});
- 
 const initialize = async ({key, pw}) => {
     const lost = await bankDBInst.findKey({key: key});
     //console.log("lost: " + lost);
     if(!lost) bankDBInst.addInitial({key: key, pw: pw});
 }
 initialize({key: "miru", pw: "our55555"}); // Registeration authorization 
-initialize({key: "night", pw: "happy"});
+initialize({key: "night", pw: "happy"}); 
 
-router.post('/getInfo', authMiddleware, (req, res) => {
+router.post('/getInfo', authMiddleware, async (req, res) => {
     try {
-        const { success, data } = bankDBInst.getBalance();
+        const { success, data } = await bankDBInst.getBalance({key: req.body.credential, pw: req.body.password});
         if (success) return res.status(200).json({ balance: data });
         else return res.status(500).json({ error: data });
     } catch (e) {
@@ -75,10 +80,11 @@ router.post('/getInfo', authMiddleware, (req, res) => {
     }
 });
 
-router.post('/transaction', authMiddleware, (req, res) => {
+router.post('/transaction', authMiddleware, async (req, res) => {
     try {
-        const { amount } = req.body;
-        const { success, data } = bankDBInst.transaction( parseInt(amount) );
+        const { credential, password, amount } = req.body;
+        const { success, data } = await bankDBInst.transaction( { key: credential, pw: password, amount: parseInt(amount)} );
+        console.log("Succ:" + data);
         if (success) res.status(200).json({ success: true, balance: data, msg: "Transaction success" });
         else res.status(500).json({ error: data })
     } catch (e) {
