@@ -67,7 +67,7 @@ const initialize = async ({key, pw}) => {
     //console.log("lost: " + lost);
     if(!lost) bankDBInst.addInitial({key: key, pw: pw});
 }
-initialize({key: "miru", pw: "our55555"}); // Registeration authorization 
+initialize({key: "Iron", pw: "Man"}); // Registeration authorization 
 initialize({key: "night", pw: "happy"}); 
 
 router.post('/getInfo', authMiddleware, async (req, res) => {

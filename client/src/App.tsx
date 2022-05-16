@@ -4,6 +4,7 @@ import HomePage from "./pages/home";
 import FeedPage from "./pages/feed";
 import SSRPage from "./pages/ssr";
 import PageNotFound from "./pages/404";
+import ArcivePage from "./pages/arcive";
 import Footer from "./components/footer";
 import './App.css';
 import AccountPage from "./pages/account";
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/account" element={ <AccountPage/> }/>
           <Route path="/cat-image" element={ <CatImagePage/> }/>
           <Route path="/ssr" element={ <SSRPage/> }/>
+          <Route path="/arcive" element={ <ArcivePage/> }/>
           <Route path="*" element={ <PageNotFound/> }/>
         </Routes>
       </BrowserRouter>

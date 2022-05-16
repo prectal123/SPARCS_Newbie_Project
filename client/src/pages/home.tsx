@@ -31,7 +31,7 @@ const HomePage = (props: {}) => {
       </div>
       <div className={"link-wrapper"}>
         <div className={"link-options"}>
-          <div className={"page-link"} onClick={ () => navigate("/feed") }>
+          <div className={"page-link"} onClick={ () => navigate("/arcive") }>
             <div className={"page-subtitle"}>Example #1</div>
             <div className={"page-title"}>CRUD Feed from Server</div>
           </div>

@@ -8,6 +8,7 @@ const statusRouter = require('./routes/status');
 const feedRouter = require('./routes/feed');
 const accountRouter = require('./routes/account');
 const ssrRouter = require('./routes/ssr');
+const arciveRouter = require('./routes/arcive');
 
 const app = express();
 const port = process.env.PORT;
@@ -30,6 +31,7 @@ app.use('/status', statusRouter);
 app.use('/feed', feedRouter);
 app.use('/account', accountRouter);
 app.use('/ssr', ssrRouter);
+app.use('/arcive', arciveRouter);
 
 app.use('/static', express.static(path.join(__dirname,'public')));
 
