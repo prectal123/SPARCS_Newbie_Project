@@ -33,7 +33,7 @@ const HomePage = (props: {}) => {
         <div className={"link-options"}>
           <div className={"page-link"} onClick={ () => navigate("/arcive") }>
             <div className={"page-subtitle"}>Example #1</div>
-            <div className={"page-title"}>CRUD Feed from Server</div>
+            <div className={"page-title"}>Artwork Arcive Login & Gallery</div>
           </div>
           <div className={"page-link"} onClick={ () => navigate("/account") }>
             <div className={"page-subtitle"}>Example #2</div>
@@ -43,9 +43,9 @@ const HomePage = (props: {}) => {
             <div className={"page-subtitle"}>Example #3</div>
             <div className={"page-title"}>Serve *Cute* Image Files</div>
           </div>
-          <div className={"page-link"} onClick={ () => navigate("/ssr") }>
+          <div className={"page-link"} onClick={ () => navigate("/register") }>
             <div className={"page-subtitle"}>Example #4</div>
-            <div className={"page-title"}>Server Side Rendering</div>
+            <div className={"page-title"}>Registration page</div>
           </div>
         </div>
       </div>

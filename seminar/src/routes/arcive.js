@@ -1,5 +1,7 @@
 const express = require('express');
+const multer = require('multer');
 const RegisterModel = require('../models/registration');
+const ArtModel = require('../models/registration');
 
 class RegDB{
     static _inst_;
@@ -26,15 +28,8 @@ class RegDB{
         const res = await newItem.save();
     }
 }
+
 const RegDBInst = RegDB.getInst();
-
-const initialize = async ({id, pw}) => {
-    const lost = await RegDBInst.CheckRegister({id: id, pw: pw});
-    if(!lost) RegDBInst.AddInitial({id: id, pw: pw});
-}
-
-initialize({id: "Foo", pw: "bar"});
-initialize({id: "macintosh", pw:"bar"});
 
 const router = express.Router();
 
@@ -49,5 +44,39 @@ router.get('/login', async (req, res) => {
         return res.status(500).json(false);
     }
 });
+
+////////Files////////
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploadedFiles/");
+    },
+    filename: (req, file, cb) => {
+        console.log("hhhhhh");
+        cb(null, `${Date.now()}_${file.originalname}`);
+    },
+});
+
+const testMiddleware = (req, res, next) => {console.log("hooray!"); next();}
+
+const upload = multer({storage: storage}).single("file");
+
+
+router.post('/uploadFile', testMiddleware, upload, (req, res) => {
+    console.log("Came in");
+    /*
+    upload(req, res, (err) => {
+        if(err) {
+            return res.json({success: false, err});
+        }
+        return res.json({
+            success: true,
+            image: res.req.file.path,
+            fileName: res.req.file.filename,
+        });
+    });
+    */
+});
+  
 
 module.exports = router;

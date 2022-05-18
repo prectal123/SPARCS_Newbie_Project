@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
+const fs = require('fs');
 require('dotenv').config();
 
 const statusRouter = require('./routes/status');
@@ -9,6 +10,8 @@ const feedRouter = require('./routes/feed');
 const accountRouter = require('./routes/account');
 const ssrRouter = require('./routes/ssr');
 const arciveRouter = require('./routes/arcive');
+const registerRouter = require('./routes/register');
+
 
 const app = express();
 const port = process.env.PORT;
@@ -32,6 +35,7 @@ app.use('/feed', feedRouter);
 app.use('/account', accountRouter);
 app.use('/ssr', ssrRouter);
 app.use('/arcive', arciveRouter);
+app.use('/register', registerRouter);
 
 app.use('/static', express.static(path.join(__dirname,'public')));
 
@@ -44,4 +48,8 @@ mongoose.connect(process.env.MONGO_URI, OMongooseOption).then(
 
 app.listen(port, () => {
    console.log(`Example App Listening @ http://localhost:${ port }`);
+
+   var dir = './uploadedFiles';
+   if (!fs.existsSync(dir)) fs.mkdirSync(dir); // 2
+
 });
