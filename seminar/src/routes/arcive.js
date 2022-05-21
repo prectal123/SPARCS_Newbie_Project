@@ -64,6 +64,7 @@ const upload = multer({storage: storage}).single("file");
 
 router.post('/uploadFile', testMiddleware, upload, (req, res) => {
     console.log("Came in");
+    console.log(req);
     /*
     upload(req, res, (err) => {
         if(err) {
