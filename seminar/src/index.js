@@ -38,6 +38,8 @@ app.use('/arcive', arciveRouter);
 app.use('/register', registerRouter);
 
 app.use('/static', express.static(path.join(__dirname,'public')));
+app.use('/ArtDB', express.static(path.join(__dirname, '../uploadedFiles')));
+
 
 // Connect to MongoDB
 const OMongooseOption = { useNewUrlParser: true, useUnifiedTopology: true };

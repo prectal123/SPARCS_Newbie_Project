@@ -5,11 +5,19 @@ const OSchemaDefinition = {
         type: String,
         default: ""
     },
-    Address: {
+    Path: {
         type: String,
         default: ""
     },
-    OriginalName: {
+    FieldName: {
+        type: String,
+        default: ""
+    },
+    Title: {
+        type: String,
+        default: ""
+    },
+    Content: {
         type: String,
         default: ""
     },

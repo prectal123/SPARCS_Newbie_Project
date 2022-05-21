@@ -17,11 +17,14 @@ const RegisterPage = () => {
                 console.log("User ID already existing. Please try another one.");
                 return false;
             } else {
+                if(GivenID === ""){ console.log("Please Enter ID"); return false;}
+                else{
                 axios.post( SAPIBase + '/register/addAccount' , {id: GivenID, pw: GivenPW});
                 console.log(`Available ID, Registration Complete. Welcome user ${GivenID}`);
                 setGivenID("");
                 setGivenPW("");
                 return true;
+                }
             }
             }
             catch {
