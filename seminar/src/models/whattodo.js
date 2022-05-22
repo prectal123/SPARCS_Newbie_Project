@@ -5,25 +5,17 @@ const OSchemaDefinition = {
         type: String,
         default: "",
     },
-    Thumb: {
-        type: String,
-        default: "",
-    },
-    Path: {
-        type: String,
-        default: "",
-    },
-    FieldName: {
-        type: String,
-        default: "",
-    },
     Title: {
         type: String,
-        default: "Default",
+        default: "",
     },
     Content: {
         type: String,
-        default: "Default",
+        default: "",
+    },
+    Arcive: {
+        type: String,
+        default: "",
     },
 
 };
@@ -31,6 +23,6 @@ const OSchemaOptions = { timestamps: true };
 
 const schema = new mongoose.Schema(OSchemaDefinition, OSchemaOptions);
 
-const ArtModel = mongoose.model("art", schema);
+const ArtModel = mongoose.model("whattodo", schema);
 
 module.exports = ArtModel;

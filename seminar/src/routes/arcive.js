@@ -42,11 +42,11 @@ class ArtDB{
         return ArtDB._inst_;
     }
 
-    ArtInsert = async ({path, fieldName}) => {
+    ArtInsert = async ({path, fieldName, title, content}) => {
         try{
-            const newItem = new ArtModel({Author: user, Path: path, FieldName: fieldName, Title: "", Content: ""});
+            const newItem = new ArtModel({Author: user, Path: path, FieldName: fieldName, Title: title, Content: content});
             const res = await newItem.save();
-            console.log("[Art-DB] Insert Complete" + newItem);
+            //console.log("[Art-DB] Insert Complete" + newItem);
             return true;
         } catch (e) {
             console.log(`[Art-DB] Insert Error: ${e}`);
@@ -109,11 +109,19 @@ const upload = multer({storage: storage}).single("file");
 //ArtDBInst.ArtDelete({id: "Miro"}); //ONLY FOR DB CLEANUP PURPOSE!!! AFTER UNANNOTATING, DELETE THE FILES IN /uploadedFiles/ !!!!
 
 router.post('/uploadFile', upload, async (req, res) => {
+    //console.log(req.body.id);
+    if(req.body.IsUpdate === "false" ){
     if(user !== "" && typeof(req.file) !== "undefined") {
     console.log(`[Upload] Uploded File name, by user: ${req.file.filename} by ${user}`);
     console.log(`[Upload] File Field Name: ${req.file.filename}`);
     console.log(`[Upload] File path: ${req.file.path}`);
-    const DBRes = await ArtDBInst.ArtInsert({path: req.file.path, fieldName: req.file.filename});}
+    const DBRes = await ArtDBInst.ArtInsert({path: req.file.path, fieldName: req.file.filename, title: req.body.Title, content: req.body.Content});
+        }
+    }
+    else {console.log("Boo! I came here to update!" + req.body.IsUpdate + "!!");
+    console.log("Given Update: " + req.body.Title + "  and   " + req.body.Content);
+    console.log(req.file.filename);
+    }//Find _id === req.body.IsUpdate and update the path and fieldName with the given one. 
 })
  
 router.get('/ArciveLoad', async (req, res) => {
