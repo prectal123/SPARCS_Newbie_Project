@@ -133,11 +133,15 @@ const ArcivePage = (proprs: {}) => {
                 <h1>Welcome to {`${GivenId}`}'s Archive</h1>
                 <div onClick={(e) => Refresh? setRefresh(false):setRefresh(true)}>새로고침 버튼임. 아무튼 그럼</div>
                 <br/>
-                <div className={"Contents_upload"}>
+                
+                {ToUpdate === "false"?
+                <div>
+                    <div className={"Contents_upload"}>
                     Title: <input type={"text"} value={GivenTitle} onChange={(e) => setGivenTitle(e.target.value)}/>
                     <br/>
                     Content: <input type={"text"} value={GivenContent} onChange={(e) => setGivenContent(e.target.value)}/>
-                </div>
+                    </div>
+
                 <div className={"File_Upload"}>
                     <form name="file" encType="multipart/form-data">
                         <input type="file" onChange={handleUpload} ref={InputTag}/>
@@ -146,7 +150,8 @@ const ArcivePage = (proprs: {}) => {
                             if(targ.files != null) handleSubmit(targ.files[0]);
                             }}>Upload</button>
                     </form>
-                </div>
+                </div></div>:<div></div>
+                }
                 <div>
                     {ArciveLoad()}
                 </div>
