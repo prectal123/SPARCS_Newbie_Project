@@ -1,0 +1,146 @@
+.arcive_home {
+    background-color: rgb(229, 249, 255);
+
+}
+
+.Login_message {
+    color: rgb(48, 80, 109)
+}
+
+.Upper_space {
+    height: 30px;
+}
+
+.Welcome_banner {
+    margin: 0px auto;
+    padding: 100px auto;
+    color:rgb(48, 80, 109);
+}
+
+.Login_Box {
+    width: calc(40%);
+    background-color: rgb(135, 167, 220);
+    margin: 0px auto 50px;
+    border-radius: 30px;
+    padding: 50px;
+}
+
+.Download_button {
+    color:rgb(110, 146, 181);
+    margin: 5px auto;
+    width: calc(50%);
+}
+
+.Download_button:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.Refresh_button {
+    border: solid 1px rgb(145, 187, 226);
+    background-color: rgb(221, 225, 246);
+    width: 10%;
+    margin: 0px auto;
+    color: rgb(80, 125, 150);
+}
+
+.Thumbnail {
+    width: 40%;
+    height: auto;
+}
+
+.Refresh_button:hover {
+    border: solid 8px rgb(0, 0, 255);
+    background-color: rgb(255, 0, 255);
+    width: 10%;
+    margin: 0px auto;
+    color: rgb(100, 255, 100);
+    font-weight: 900;
+    cursor: pointer;
+    transform: scale(2);
+    transition: transform 100ms ease;
+}
+
+.Upload_box {
+    border: solid 1px rgb(145, 187, 226);
+    background-color: rgba(228, 245, 255, 0);
+    border-radius: 10px;
+    margin: 0 auto;
+    width: calc(50%);
+}
+
+.Contents_upload {
+    margin: 10px auto;
+    width: calc(70%);
+}
+
+.Input_box_1 {
+    margin: 10px auto 0px auto;
+    color:rgb(48, 80, 109);
+
+}
+
+.Input_box_2 {
+    margin: 0px auto 10px auto;
+    color:rgb(48, 80, 109);
+}
+
+.File_upload {
+    margin: 20px auto 10px auto;
+}
+
+.Update_content_input_box {
+    width: 50%;
+}
+
+.Update_title_input_box {
+    width: 20%;
+
+    height: 10%;
+}
+
+.Art_item {
+    background-color: white;
+    width: calc(50%);
+    margin: 10px auto;
+    border: solid 2px rgb(145, 187, 226);
+    border-radius: 20px;
+    padding: 0px 20px;
+}
+
+.Update_content {
+    margin: 20px auto;
+}
+
+.Update_title {
+    margin: 20px auto;
+}
+
+.Update_button {
+    color: lightskyblue;
+    font-size: 15px;
+    margin: 5px auto;
+    width: calc(20%);
+}
+
+.Update_button:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.Delete_button {
+    color: lightcoral;
+    font-size: 15px;
+    margin: 5px auto;
+    width: calc(10%);
+}
+
+.Delete_button:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.Date {
+    color: rgb(180,180,180);
+    font-size: 10px;
+}

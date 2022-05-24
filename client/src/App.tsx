@@ -6,7 +6,9 @@ import SSRPage from "./pages/ssr";
 import PageNotFound from "./pages/404";
 import ArcivePage from "./pages/arcive";
 import RegisterPage from "./pages/register";
+import WhatToDoPage from "./pages/whatToDo";
 import Footer from "./components/footer";
+
 
 import './App.css';
 import AccountPage from "./pages/account";
@@ -25,6 +27,7 @@ const App = () => {
           <Route path="/ssr" element={ <SSRPage/> }/>
           <Route path="/arcive" element={ <ArcivePage/> }/>
           <Route path="/register" element={ <RegisterPage/> }/>
+          <Route path="/whatToDO" element={ <WhatToDoPage/> }/>
           <Route path="*" element={ <PageNotFound/> }/>
         </Routes>
       </BrowserRouter>

@@ -19,13 +19,16 @@ const OSchemaDefinition = {
     },
     Title: {
         type: String,
-        default: "Default",
+        default: "",
     },
     Content: {
         type: String,
-        default: "Default",
+        default: "",
     },
-
+    Dated: {
+        type: String,
+        default: "",
+    },
 };
 const OSchemaOptions = { timestamps: true };
 

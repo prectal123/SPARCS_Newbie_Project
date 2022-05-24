@@ -1,12 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { SAPIBase } from "../tools/api";
-import Header from "../components/header";
-import App from "../App";
-import { addSyntheticTrailingComment } from "typescript";
-//import "./css/feed.css";
+import "./css/arcive.css";
 
-interface ArtStruct {_id: String, Author: String, Path: String, FieldName: String, Title: String, Content: String}
+interface ArtStruct {_id: String, Author: String, Path: String, FieldName: String, Title: String, Content: String, Thumb: String, Dated: String}
 
 const ArcivePage = (proprs: {}) => {
     const [ DoneLogin, setDoneLogin ] = React.useState<boolean>(false);
@@ -60,6 +57,10 @@ const ArcivePage = (proprs: {}) => {
         }
     }
 
+    const handleDelete = async (id: string) => {
+        await axios.post(SAPIBase + "/arcive/ArciveDelete", {id: id});
+    }
+
     const handleSubmit = async (e: any) => {
         //e.preventDefault();
         const formData = new FormData();
@@ -67,12 +68,18 @@ const ArcivePage = (proprs: {}) => {
         formData.append("Title", GivenTitle );
         formData.append("Content", GivenContent);
         formData.append("IsUpdate", ToUpdate);
-
+        let Data_OB = new Date();
+        formData.append("Dated", `${Data_OB.getFullYear()}년 ${Data_OB.getMonth() + 1}월 ${Data_OB.getDay()}일 ${Data_OB.getHours()}:${Data_OB.getMinutes()}:${Data_OB.getSeconds()}`)
+        setToUpdate("false");
+        setGivenTitle("");
+        setGivenContent("");
+        setSelectedFile({uploadedFile: null});
+        if(Refresh){ setRefresh(false);} else {setRefresh(true);}
         setFileReloaded(false);
         await axios.post(SAPIBase+"/arcive/uploadFile", formData, {
             headers: { 'content-type': 'multipart/form-data' },
         });
-        setToUpdate("false");
+        
     }
 
     const handleUpload = async (e: any) => {
@@ -100,28 +107,42 @@ const ArcivePage = (proprs: {}) => {
             else return (ArciveListed.map( (val, i) => 
                <div key={i} className={"Art_item"}>
                 <div>
-                    <div>Delete</div> 
-
+                    <div className={'Delete_button'} onClick={(e) => handleDelete(`${val._id}`)}>삭제</div> 
+                    { ToUpdate != val._id? 
                     <h3>
                         {`${val.Title ? val.Title : `${i+1}th Post`}`}
-                    </h3>
-                    <p>Content: {`${ val.Content ? val.Content : 'Empty Context'}`}</p> 
-                    
+                    </h3> : 
+                    <div className={"Update_title"}> <input className={"Update_title_input_box"} type={"text"} value={GivenTitle} onChange={(e) => setGivenTitle(e.target.value)}/> </div>
+                    }
+                    {
+                        val.Thumb === "" ? <img className={"Thumbnail"} alt={"Thumbnail of ${i+1}th Post"} src={SAPIBase+`/defaultThumb/DefaultThumb.png`} height={"200px"} width={"200px"}/>: <img className={"Thumbnail"} alt={"Thumbnail of ${i+1}th Post"} src={SAPIBase+`/ArtDB/${val.Thumb}`} height={"200px"} width={"200px"}/>
+                    }
+
+                    { ToUpdate != val._id?
+                    <p>{`${ val.Content ? val.Content : 'Empty Context'}`}</p> :
+                       <div className={"Update_content"}> <input className={"Update_content_input_box"} type={"text"} value={GivenContent} onChange={(e) => setGivenContent(e.target.value)}/> </div>
+                    } 
+
                     { ToUpdate === val._id? <div className={"File_Upload"}>
                     <form name="file" encType="multipart/form-data">
                         <input type="file" onChange={handleUpload} ref={InputTag2}/>
                         <button type="button" onClick={(e)=>{
                             const targ = InputTag2.current as HTMLInputElement;
                             if(targ.files != null) handleSubmit(targ.files[0]);
-                            }}>Upload</button>
+                            }}>변경사항 업로드</button>
                     </form>
                     </div> : <div></div>
                    }
                     
                 </div>
-                <br/><div className={"doen_load"} onClick={(e) => DownLoad(val.FieldName)}>{val.FieldName} : 파일 다운</div>
-                <div>Update</div>
-                <hr/>
+            <div className={"Download_button"} onClick={(e) => DownLoad(val.FieldName)}>{val.FieldName}</div>
+
+                { ToUpdate != val._id?
+                <div className={"Update_button"} onClick={(e) => {setGivenTitle(`${val.Title}`); setGivenContent(`${val.Content}`); setToUpdate(`${val._id}`)}}>업데이트</div>:
+                <div className={"Update_button"} onClick={(e) => {setGivenTitle(""); setGivenContent(""); setToUpdate("false")}}>취소</div>
+                }
+                
+                <div className={"Date"}>{val.Dated}</div>
                 
                </div>
            ));
@@ -130,25 +151,30 @@ const ArcivePage = (proprs: {}) => {
     const isLogin = () => {
         if(DoneLogin) {return (
             <div>
-                <h1>Welcome to {`${GivenId}`}'s Archive</h1>
-                <div onClick={(e) => Refresh? setRefresh(false):setRefresh(true)}>새로고침 버튼임. 아무튼 그럼</div>
+                <div className={"Upper_space"}></div>
+                <h1 className={"Welcome_banner"}>Welcome to {`${GivenId}`}'s Archive</h1>
+                <p>파일 업로드 혹은 업데이트 내역의 적용을 확인하고 싶다면, 반드시 새로고침을 해주십시오</p>
+                <div className={"Refresh_button"} onClick={(e) => Refresh? setRefresh(false):setRefresh(true)}>새로고침</div>
                 <br/>
                 
                 {ToUpdate === "false"?
-                <div>
+                <div className={"Upload_box"}>
                     <div className={"Contents_upload"}>
-                    Title: <input type={"text"} value={GivenTitle} onChange={(e) => setGivenTitle(e.target.value)}/>
+                        <div className={"Input_box_1"}>
+                    제목: <input type={"text"} value={GivenTitle} onChange={(e) => setGivenTitle(e.target.value)}/> </div>
                     <br/>
-                    Content: <input type={"text"} value={GivenContent} onChange={(e) => setGivenContent(e.target.value)}/>
+                    <div className={"Input_box_2"}>
+                    내용: <input type={"text"} value={GivenContent} onChange={(e) => setGivenContent(e.target.value)}/> </div>
                     </div>
 
-                <div className={"File_Upload"}>
+                <div className={"File_upload"}>
                     <form name="file" encType="multipart/form-data">
                         <input type="file" onChange={handleUpload} ref={InputTag}/>
                         <button type="button" onClick={(e)=>{
+                            setToUpdate("false");
                             const targ = InputTag.current as HTMLInputElement;
                             if(targ.files != null) handleSubmit(targ.files[0]);
-                            }}>Upload</button>
+                            }}>업로드</button>
                     </form>
                 </div></div>:<div></div>
                 }
@@ -159,13 +185,14 @@ const ArcivePage = (proprs: {}) => {
             </div>
         );} else {return (
             <div>
-                <h2>Login</h2>
+                <h2 className={"Login_message"}>로그인</h2>
             <div className={"Login_Box"}>
                 <div className={"Part_input"}>
-                    ID : <input type={"text"} value={GivenId} onChange = { (e) => setGivenId(e.target.value) } />
+                    아이디 : <input type={"text"} value={GivenId} onChange = { (e) => setGivenId(e.target.value) } />
                 </div>
+                <br/>
                 <div className={"Part_input"}>
-                    Password: <input type={"password"} value={GivenPw} onChange = { (e) => setGivenPw(e.target.value) } />
+                    비밀번호: <input type={"password"} value={GivenPw} onChange = { (e) => setGivenPw(e.target.value) } />
                 </div>
                 <div className={"Login_Button"} onClick={ (e) => Login() }>Login</div>
             </div>
@@ -173,7 +200,7 @@ const ArcivePage = (proprs: {}) => {
         );};
     }
     return (
-        <div>
+        <div className={"arcive_home"}>
             {isLogin()}
         </div>
         

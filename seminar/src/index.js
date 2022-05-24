@@ -39,7 +39,7 @@ app.use('/register', registerRouter);
 
 app.use('/static', express.static(path.join(__dirname,'public')));
 app.use('/ArtDB', express.static(path.join(__dirname, '../uploadedFiles')));
-
+app.use('/defaultThumb', express.static(path.join(__dirname, '../SystemImage')));
 
 // Connect to MongoDB
 const OMongooseOption = { useNewUrlParser: true, useUnifiedTopology: true };
@@ -48,10 +48,15 @@ mongoose.connect(process.env.MONGO_URI, OMongooseOption).then(
     (err) => { console.log(`[Mongoose] Connection Error: ${ err }`) }
 );
 
-app.listen(port, () => {
-   console.log(`Example App Listening @ http://localhost:${ port }`);
 
-   var dir = './uploadedFiles';
-   if (!fs.existsSync(dir)) fs.mkdirSync(dir); // 2
+var dir = './uploadedFiles';
+fs.access(dir, (error) => {
+        console.log(error)
+        if(error) {fs.mkdirSync(dir); console.log("Directory Created");}
+})
+
+app.listen(port, async () => {
+   console.log(`Example App Listening @ http://localhost:${ port }`);
+   //if (!fs.existsSync(dir, (str)=>{console.log()})) fs.mkdirSync(dir); // 2
 
 });

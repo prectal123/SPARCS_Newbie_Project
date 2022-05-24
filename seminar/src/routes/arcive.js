@@ -42,9 +42,9 @@ class ArtDB{
         return ArtDB._inst_;
     }
 
-    ArtInsert = async ({path, fieldName, title, content}) => {
+    ArtInsert = async ({path, fieldName, title, content, thumb, dated}) => {
         try{
-            const newItem = new ArtModel({Author: user, Path: path, FieldName: fieldName, Title: title, Content: content});
+            const newItem = new ArtModel({Author: user, Thumb: thumb, Path: path, FieldName: fieldName, Title: title, Content: content, Dated: dated});
             const res = await newItem.save();
             //console.log("[Art-DB] Insert Complete" + newItem);
             return true;
@@ -55,8 +55,9 @@ class ArtDB{
     }
 
     ArtDelete = async ({id}) => {
-        try{   
-            const res = await ArtModel.deleteMany({ID: id});
+        try{
+            console.log(id);
+            const res = await ArtModel.deleteOne({_id: id});
             console.log("[Art-DB] Delete Complete");
             return true;
         } catch (e) {
@@ -71,6 +72,25 @@ class ArtDB{
             return {data: res};
         } catch (e) {
 
+        }
+    }
+
+    UpdateItems = async ({id, path, fieldName, thumb, dated, title, content}) => {
+        try{
+            console.log("given: " + {id, path, fieldName, thumb, dated, title, content});
+            if(path === "" && fieldName === "" && thumb === "") {
+                const datar = await ArtModel.findOne({_id:id})
+                console.log("DATA:" + typeof(String(datar.FieldName)));
+                const res = await ArtModel.updateOne( {_id: id}, {Path: String(datar.Path), FieldName: String(datar.FieldName), Thumb: String(datar.thumb), Dated: dated, Title: title, Content: content});
+            }
+
+            const res = await ArtModel.updateOne({_id: id}, {Path: path, FieldName: fieldName, Thumb: thumb, Dated: dated, Title: title, Content: content});
+            console.log("fieldName: " + fieldName);
+            console.log("[Art-DB] Update Complete!")
+            return true;
+        } catch (e) {
+            console.log(`[Art-DB] Update Error ${e}`);
+            return false;
         }
     }
 }
@@ -112,16 +132,23 @@ router.post('/uploadFile', upload, async (req, res) => {
     //console.log(req.body.id);
     if(req.body.IsUpdate === "false" ){
     if(user !== "" && typeof(req.file) !== "undefined") {
+    console.log(req.file);
     console.log(`[Upload] Uploded File name, by user: ${req.file.filename} by ${user}`);
     console.log(`[Upload] File Field Name: ${req.file.filename}`);
     console.log(`[Upload] File path: ${req.file.path}`);
-    const DBRes = await ArtDBInst.ArtInsert({path: req.file.path, fieldName: req.file.filename, title: req.body.Title, content: req.body.Content});
+    const DBRes = await ArtDBInst.ArtInsert({path: req.file.path, fieldName: req.file.filename, title: req.body.Title, content: req.body.Content, thumb: ((`${req.file.mimetype}` === "image/png" || `${req.file.mimetype}` === "image/jpeg")? `${req.file.filename}`:""), dated: `${req.body.Dated}에 생성됨` });
         }
     }
     else {console.log("Boo! I came here to update!" + req.body.IsUpdate + "!!");
     console.log("Given Update: " + req.body.Title + "  and   " + req.body.Content);
-    console.log(req.file.filename);
+    if(typeof(req.file) !== "undefined") {console.log(req.file); const rep = await ArtDBInst.UpdateItems({id: req.body.IsUpdate, path: req.file.path, fieldName: req.file.filename, thumb:((`${req.file.mimetype}` === "image/png" || `${req.file.mimetype}` === "image/jpeg")? `${req.file.filename}`:"") , dated: `${req.body.Dated}에 편집됨` , title: `${req.body.Title}`, content: `${req.body.Content}`});}
+    else {
+        console.log(req.body.Content);
+        const datar = await ArtModel.findOne({_id:req.body.IsUpdate});
+        const rep = await ArtDBInst.UpdateItems({id: req.body.IsUpdate, path: datar.Path, fieldName: datar.FieldName, thumb:datar.FieldName , dated: `${req.body.Dated}에 편집됨` , title: `${req.body.Title}`, content: `${req.body.Content}`});
+    }
     }//Find _id === req.body.IsUpdate and update the path and fieldName with the given one. 
+    res.status(200).end();
 })
  
 router.get('/ArciveLoad', async (req, res) => {
@@ -134,10 +161,16 @@ router.get('/ArciveLoad', async (req, res) => {
     } 
 })
 
+router.post('/ArciveDelete', async (req, res) => {
+    const DBRes = await ArtDBInst.ArtDelete({id:req.body.id});
+    console.log("[Art-DB] Art Deleted");
+    res.status(200).end();
+})
+
 router.get('/Download', async (req, res) => {
     const link = req.query.link;
     console.log("[Arcive-DB] Server sent " + link + " To the Client, " + user);
-    try {res.sendFile(path.resolve(__dirname, `../../uploadedFiles/${link}`));} catch (e) {
+    try {await res.sendFile(path.resolve(__dirname, `../../uploadedFiles/${link}`));} catch (e) {
         return res.stauts(500).json({error: e});
     }
 })

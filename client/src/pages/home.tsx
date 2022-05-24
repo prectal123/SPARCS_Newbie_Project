@@ -35,7 +35,7 @@ const HomePage = (props: {}) => {
             <div className={"page-subtitle"}>Example #1</div>
             <div className={"page-title"}>Artwork Arcive Login & Gallery</div>
           </div>
-          <div className={"page-link"} onClick={ () => navigate("/account") }>
+          <div className={"page-link"} onClick={ () => navigate("/whatToDo") }>
             <div className={"page-subtitle"}>Example #2</div>
             <div className={"page-title"}>Middleware & Authorization</div>
           </div>
