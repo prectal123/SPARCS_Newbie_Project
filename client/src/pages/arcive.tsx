@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { SAPIBase } from "../tools/api";
+import { AsyncSleep } from "../tools/sleep";
 import "./css/arcive.css";
 
 interface ArtStruct {_id: String, Author: String, Path: String, FieldName: String, Title: String, Content: String, Thumb: String, Dated: String}
@@ -19,6 +20,8 @@ const ArcivePage = (proprs: {}) => {
     const [ GivenContent, setGivenContent ] = React.useState<string>("");
     const [ ToUpdate, setToUpdate ] = React.useState<string>("false");
     const [ Refresh, setRefresh ] = React.useState<boolean>(false);
+
+    const [ AddNew, setAddNew ] = React.useState<boolean>(false);
 
     const InputTag  = React.useRef<any>(0);
     const InputTag2 = React.useRef<any>(0);
@@ -59,6 +62,7 @@ const ArcivePage = (proprs: {}) => {
 
     const handleDelete = async (id: string) => {
         await axios.post(SAPIBase + "/arcive/ArciveDelete", {id: id});
+        if(Refresh){ setRefresh(false);} else {setRefresh(true);}
     }
 
     const handleSubmit = async (e: any) => {
@@ -68,18 +72,19 @@ const ArcivePage = (proprs: {}) => {
         formData.append("Title", GivenTitle );
         formData.append("Content", GivenContent);
         formData.append("IsUpdate", ToUpdate);
+        formData.append("Author", GivenId);
         let Data_OB = new Date();
         formData.append("Dated", `${Data_OB.getFullYear()}년 ${Data_OB.getMonth() + 1}월 ${Data_OB.getDay()}일 ${Data_OB.getHours()}:${Data_OB.getMinutes()}:${Data_OB.getSeconds()}`)
         setToUpdate("false");
         setGivenTitle("");
         setGivenContent("");
         setSelectedFile({uploadedFile: null});
-        if(Refresh){ setRefresh(false);} else {setRefresh(true);}
-        setFileReloaded(false);
         await axios.post(SAPIBase+"/arcive/uploadFile", formData, {
             headers: { 'content-type': 'multipart/form-data' },
         });
-        
+        if(Refresh){ setRefresh(false);} else {setRefresh(true);}
+        setFileReloaded(false);
+        setAddNew(false);
     }
 
     const handleUpload = async (e: any) => {
@@ -107,10 +112,10 @@ const ArcivePage = (proprs: {}) => {
             else return (ArciveListed.map( (val, i) => 
                <div key={i} className={"Art_item"}>
                 <div>
-                    <div className={'Delete_button'} onClick={(e) => handleDelete(`${val._id}`)}>삭제</div> 
+                    
                     { ToUpdate != val._id? 
                     <h3>
-                        {`${val.Title ? val.Title : `${i+1}th Post`}`}
+                        {`${val.Title ?  val.Title.length > 20? val.Title.substring(0, 20) + "..." : val.Title : `${i+1}th Post`}`}
                     </h3> : 
                     <div className={"Update_title"}> <input className={"Update_title_input_box"} type={"text"} value={GivenTitle} onChange={(e) => setGivenTitle(e.target.value)}/> </div>
                     }
@@ -119,27 +124,27 @@ const ArcivePage = (proprs: {}) => {
                     }
 
                     { ToUpdate != val._id?
-                    <p>{`${ val.Content ? val.Content : 'Empty Context'}`}</p> :
+                    <p className={"Contents"}>{`${ val.Content ? val.Content.length > 40? val.Content.substring(0, 40) + "..." : val.Content : 'Empty Context'}`}</p> :
                        <div className={"Update_content"}> <input className={"Update_content_input_box"} type={"text"} value={GivenContent} onChange={(e) => setGivenContent(e.target.value)}/> </div>
                     } 
 
                     { ToUpdate === val._id? <div className={"File_Upload"}>
-                    <form name="file" encType="multipart/form-data">
-                        <input type="file" onChange={handleUpload} ref={InputTag2}/>
-                        <button type="button" onClick={(e)=>{
+                    <form className={"up_form"} name="file" encType="multipart/form-data">
+                        <input className={"upload_button"} type="file" onChange={handleUpload} ref={InputTag2}/>
+                        <button className={"submit_button"} type="button" onClick={(e)=>{
                             const targ = InputTag2.current as HTMLInputElement;
                             if(targ.files != null) handleSubmit(targ.files[0]);
-                            }}>변경사항 업로드</button>
+                            }}>적용</button>
                     </form>
-                    </div> : <div></div>
+                    </div> : <div className={"Download_button"} onClick={(e) => DownLoad(val.FieldName)}>{val.FieldName}</div>
                    }
                     
                 </div>
-            <div className={"Download_button"} onClick={(e) => DownLoad(val.FieldName)}>{val.FieldName}</div>
+            
 
                 { ToUpdate != val._id?
-                <div className={"Update_button"} onClick={(e) => {setGivenTitle(`${val.Title}`); setGivenContent(`${val.Content}`); setToUpdate(`${val._id}`)}}>업데이트</div>:
-                <div className={"Update_button"} onClick={(e) => {setGivenTitle(""); setGivenContent(""); setToUpdate("false")}}>취소</div>
+                <p className={"Update_Delete"}><p className={"Update_button"} onClick={(e) => { setAddNew(false); setGivenTitle(`${val.Title}`); setGivenContent(`${val.Content}`); setToUpdate(`${val._id}`)}}>업데이트</p> <p className={"Split"}>|</p> <p className={'Delete_button'} onClick={(e) => handleDelete(`${val._id}`)}>삭제</p></p> :
+                <div className={"Cancel_button"} onClick={(e) => {setGivenTitle(""); setGivenContent(""); setToUpdate("false")}}>취소</div>
                 }
                 
                 <div className={"Date"}>{val.Dated}</div>
@@ -147,18 +152,22 @@ const ArcivePage = (proprs: {}) => {
                </div>
            ));
         }
-
+/*<p>파일 업로드 혹은 업데이트 내역의 적용을 확인하고 싶다면, 반드시 새로고침을 해주십시오</p>
+                <div className={"Refresh_button"} onClick={(e) => Refresh? setRefresh(false):setRefresh(true)}>새로고침</div>*/
     const isLogin = () => {
         if(DoneLogin) {return (
-            <div>
+            <div className={"Arcive"}>
                 <div className={"Upper_space"}></div>
                 <h1 className={"Welcome_banner"}>Welcome to {`${GivenId}`}'s Archive</h1>
-                <p>파일 업로드 혹은 업데이트 내역의 적용을 확인하고 싶다면, 반드시 새로고침을 해주십시오</p>
-                <div className={"Refresh_button"} onClick={(e) => Refresh? setRefresh(false):setRefresh(true)}>새로고침</div>
+                
                 <br/>
                 
-                {ToUpdate === "false"?
-                <div className={"Upload_box"}>
+                <div className={"Art_list"}>
+                    {ArciveLoad()}
+                </div>
+
+                {ToUpdate === "false" && AddNew?
+                <div className={"Art_item"}>
                     <div className={"Contents_upload"}>
                         <div className={"Input_box_1"}>
                     제목: <input type={"text"} value={GivenTitle} onChange={(e) => setGivenTitle(e.target.value)}/> </div>
@@ -175,12 +184,10 @@ const ArcivePage = (proprs: {}) => {
                             const targ = InputTag.current as HTMLInputElement;
                             if(targ.files != null) handleSubmit(targ.files[0]);
                             }}>업로드</button>
+                            <div className={"Add_cancel_button"} onClick={(e) => {setAddNew(false);}}>취소</div>
                     </form>
-                </div></div>:<div></div>
+                </div></div>:<div className={"Art_item"} onClick={(e) => { setGivenTitle(""); setGivenContent(""); setAddNew(true); setToUpdate("false"); }}><img src={SAPIBase+`/defaultThumb/Add.png`}/></div>
                 }
-                <div>
-                    {ArciveLoad()}
-                </div>
                 
             </div>
         );} else {return (

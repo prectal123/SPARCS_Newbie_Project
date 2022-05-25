@@ -19,7 +19,7 @@
 
 .Login_Box {
     width: calc(40%);
-    background-color: rgb(135, 167, 220);
+    background-color: rgb(200, 221, 255);
     margin: 0px auto 50px;
     border-radius: 30px;
     padding: 50px;
@@ -28,7 +28,8 @@
 .Download_button {
     color:rgb(110, 146, 181);
     margin: 5px auto;
-    width: calc(50%);
+    width: calc(70%);
+    font-size: 8px;
 }
 
 .Download_button:hover {
@@ -44,20 +45,16 @@
     color: rgb(80, 125, 150);
 }
 
-.Thumbnail {
-    width: 40%;
-    height: auto;
-}
 
 .Refresh_button:hover {
-    border: solid 8px rgb(0, 0, 255);
-    background-color: rgb(255, 0, 255);
+    border: solid 1px rgb(177, 177, 216);
+    background-color: rgb(235, 213, 255);
     width: 10%;
     margin: 0px auto;
-    color: rgb(100, 255, 100);
+    color: rgb(59, 65, 116);
     font-weight: 900;
     cursor: pointer;
-    transform: scale(2);
+    transform: scale(1.02);
     transition: transform 100ms ease;
 }
 
@@ -69,8 +66,12 @@
     width: calc(50%);
 }
 
+.Contents {
+    margin: 2px 2px;
+}
+
 .Contents_upload {
-    margin: 10px auto;
+    margin: 50px auto;
     width: calc(70%);
 }
 
@@ -99,21 +100,97 @@
     height: 10%;
 }
 
+.Arcive {
+    overflow: hidden;
+}
+
+.Thumbnail {
+    height:150px;
+    width: auto;
+    margin: 2% 2%;
+}
+
 .Art_item {
     background-color: white;
-    width: calc(50%);
-    margin: 10px auto;
+    width: 350px;
+    height: 350px;
+    margin: 10px 10px;
     border: solid 2px rgb(145, 187, 226);
     border-radius: 20px;
-    padding: 0px 20px;
+    overflow: visible;
+    float: left;
+}
+
+.Art_item:hover {
+    background-color: white;
+    width: 350px;
+    height: 350px;
+    margin: 10px 10px;
+    border: solid 2px rgb(145, 187, 226);
+    border-radius: 20px;
+    overflow: visible;
+    float: left;
+    box-shadow: 
+        0 0 5px 1px #fffb,
+        0 0 9px 5px #7ff6,
+        0 0 15px 9px #25f3;
+    transition: box-shadow 300ms ease;
+}
+
+.submit_button {
+    size: 5px;
+    display: inline;
+}
+
+.Delete_button {
+    display: inline;
+}
+
+.Split {
+    display: inline;
+    color:rgb(124, 156, 185);
+}
+
+.Update_button {
+    display: inline;
+}
+
+.arcive_home {
+    height: 100%;
+}
+
+.Update_Delete {
+    margin: 2px 0px;
 }
 
 .Update_content {
-    margin: 20px auto;
+    margin: 5px auto;
 }
 
 .Update_title {
     margin: 20px auto;
+}
+
+.Cancel_button {
+    margin: 3px 3px;
+    display: inline;
+    color:rgb(80, 125, 150);
+}
+
+.Cancel_button:hover {
+    margin: 3px 3px;
+    display: inline;
+    font-weight: bold;
+}
+
+.Add_cancel_button {
+    margin: 3px 3px;
+    color:rgb(80, 125, 150);
+}
+
+.Add_cancel_button:hover {
+    margin: 3px 3px;
+    font-weight: bold;
 }
 
 .Update_button {
@@ -143,4 +220,9 @@
 .Date {
     color: rgb(180,180,180);
     font-size: 10px;
+    margin: 5px 0 0 0;
+}
+
+.up_form {
+    margin: 10px 0px;
 }

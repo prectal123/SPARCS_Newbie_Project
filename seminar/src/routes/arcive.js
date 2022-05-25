@@ -4,8 +4,6 @@ const RegisterModel = require('../models/registration');
 const ArtModel = require('../models/Art');
 const path = require('path');
 
-let user = "";
-
 class RegDB{
     static _inst_;
     static getInst = () => {
@@ -32,7 +30,7 @@ class RegDB{
     }
 
 
-}
+}  
 
 class ArtDB{
 
@@ -42,9 +40,9 @@ class ArtDB{
         return ArtDB._inst_;
     }
 
-    ArtInsert = async ({path, fieldName, title, content, thumb, dated}) => {
+    ArtInsert = async ({author, path, fieldName, title, content, thumb, dated}) => {
         try{
-            const newItem = new ArtModel({Author: user, Thumb: thumb, Path: path, FieldName: fieldName, Title: title, Content: content, Dated: dated});
+            const newItem = new ArtModel({Author: author, Thumb: thumb, Path: path, FieldName: fieldName, Title: title, Content: content, Dated: dated});
             const res = await newItem.save();
             //console.log("[Art-DB] Insert Complete" + newItem);
             return true;
@@ -105,7 +103,6 @@ router.get('/login', async (req, res) => {
         const userID = req.query.userID;
         const userPW = req.query.userPW;
         const dbRes = await RegDBInst.CheckRegister({id: userID, pw: userPW});
-        user = userID;
         if (dbRes) return res.status(200).json(true);
         else {return res.status(500).json(false);}
     } catch (e) {
@@ -131,12 +128,12 @@ const upload = multer({storage: storage}).single("file");
 router.post('/uploadFile', upload, async (req, res) => {
     //console.log(req.body.id);
     if(req.body.IsUpdate === "false" ){
-    if(user !== "" && typeof(req.file) !== "undefined") {
-    console.log(req.file);
-    console.log(`[Upload] Uploded File name, by user: ${req.file.filename} by ${user}`);
+    if(req.body.Author !== "" && typeof(req.file) !== "undefined") {
+    console.log("쓰니: "  + req.body.Author);
+    console.log(`[Upload] Uploded File name, by user: ${req.file.filename} by ${req.body.Author}`);
     console.log(`[Upload] File Field Name: ${req.file.filename}`);
     console.log(`[Upload] File path: ${req.file.path}`);
-    const DBRes = await ArtDBInst.ArtInsert({path: req.file.path, fieldName: req.file.filename, title: req.body.Title, content: req.body.Content, thumb: ((`${req.file.mimetype}` === "image/png" || `${req.file.mimetype}` === "image/jpeg")? `${req.file.filename}`:""), dated: `${req.body.Dated}에 생성됨` });
+    const DBRes = await ArtDBInst.ArtInsert({author:req.body.Author, path: req.file.path, fieldName: req.file.filename, title: req.body.Title, content: req.body.Content, thumb: ((`${req.file.mimetype}` === "image/png" || `${req.file.mimetype}` === "image/jpeg")? `${req.file.filename}`:""), dated: `${req.body.Dated}에 생성됨` });
         }
     }
     else {console.log("Boo! I came here to update!" + req.body.IsUpdate + "!!");
@@ -169,7 +166,7 @@ router.post('/ArciveDelete', async (req, res) => {
 
 router.get('/Download', async (req, res) => {
     const link = req.query.link;
-    console.log("[Arcive-DB] Server sent " + link + " To the Client, " + user);
+    console.log("[Arcive-DB] Server sent " + link + " To the Client, ");
     try {await res.sendFile(path.resolve(__dirname, `../../uploadedFiles/${link}`));} catch (e) {
         return res.stauts(500).json({error: e});
     }
