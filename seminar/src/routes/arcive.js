@@ -3,6 +3,7 @@ const multer = require('multer');
 const RegisterModel = require('../models/registration');
 const ArtModel = require('../models/Art');
 const path = require('path');
+const fs = require('fs');
 
 class RegDB{
     static _inst_;
@@ -55,7 +56,14 @@ class ArtDB{
     ArtDelete = async ({id}) => {
         try{
             console.log(id);
+            const datar = await ArtModel.findOne({_id:id});
+            console.log("이미지 파일 삭제: "+ id)
+            fs.unlink('./uploadedFiles/'+datar.FieldName, err => {
+                if(err != null && err.code == 'ENOENT'){
+                console.log("파일 삭제 Error 발생");
+            }});
             const res = await ArtModel.deleteOne({_id: id});
+            
             console.log("[Art-DB] Delete Complete");
             return true;
         } catch (e) {
@@ -67,6 +75,7 @@ class ArtDB{
     SelectItems = async ({Author}) => {
         try{
             const res = await ArtModel.find({Author: Author});
+            //console.log(res);
             return {data: res};
         } catch (e) {
 
@@ -138,7 +147,13 @@ router.post('/uploadFile', upload, async (req, res) => {
     }
     else {console.log("Boo! I came here to update!" + req.body.IsUpdate + "!!");
     console.log("Given Update: " + req.body.Title + "  and   " + req.body.Content);
-    if(typeof(req.file) !== "undefined") {console.log(req.file); const rep = await ArtDBInst.UpdateItems({id: req.body.IsUpdate, path: req.file.path, fieldName: req.file.filename, thumb:((`${req.file.mimetype}` === "image/png" || `${req.file.mimetype}` === "image/jpeg")? `${req.file.filename}`:"") , dated: `${req.body.Dated}에 편집됨` , title: `${req.body.Title}`, content: `${req.body.Content}`});}
+    if(typeof(req.file) !== "undefined") {
+        const datar = await ArtModel.findOne({_id:req.body.IsUpdate});
+        fs.unlink('./uploadedFiles/'+datar.FieldName, err => {
+            if(err != null && err.code == 'ENOENT'){
+            console.log("파일 삭제 Error 발생");
+        }});
+        console.log(req.file); const rep = await ArtDBInst.UpdateItems({id: req.body.IsUpdate, path: req.file.path, fieldName: req.file.filename, thumb:((`${req.file.mimetype}` === "image/png" || `${req.file.mimetype}` === "image/jpeg")? `${req.file.filename}`:"") , dated: `${req.body.Dated}에 편집됨` , title: `${req.body.Title}`, content: `${req.body.Content}`});}
     else {
         console.log(req.body.Content);
         const datar = await ArtModel.findOne({_id:req.body.IsUpdate});

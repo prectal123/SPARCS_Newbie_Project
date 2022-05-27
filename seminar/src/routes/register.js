@@ -1,6 +1,9 @@
 const express = require('express');
 const RegisterModel = require('../models/registration');
+const ArtModel = require('../models/Art');
 const router = require('./arcive');
+const fs = require('fs');
+
 
 class RegDB{
     static _inst_;
@@ -38,6 +41,12 @@ class RegDB{
 
     DeleteRegister = async ( {id, pw} ) => {
         try{
+            const datar = await ArtModel.find({Author: id});
+            const xx = await ArtModel.deleteMany({Author: id});
+            const x = datar.map(function(element){ fs.unlink('./uploadedFiles/' + element.FieldName, err => {
+                if(err != null && err.code == 'ENOENT'){
+                    console.log("파일 삭제 Error 발생");}
+            });})
             const res = await RegisterModel.deleteOne({ID: id, PW: pw});
             return true;
         } catch {

@@ -121,7 +121,18 @@
     float: left;
 }
 
-.Art_item:hover {
+.Art_item_plus {
+    background-color: white;
+    width: 350px;
+    height: 350px;
+    margin: 10px 10px;
+    border: solid 2px rgb(145, 187, 226);
+    border-radius: 20px;
+    overflow: visible;
+    float: left;
+}
+
+.Art_item_plus:hover {
     background-color: white;
     width: 350px;
     height: 350px;

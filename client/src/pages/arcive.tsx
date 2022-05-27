@@ -186,7 +186,7 @@ const ArcivePage = (proprs: {}) => {
                             }}>업로드</button>
                             <div className={"Add_cancel_button"} onClick={(e) => {setAddNew(false);}}>취소</div>
                     </form>
-                </div></div>:<div className={"Art_item"} onClick={(e) => { setGivenTitle(""); setGivenContent(""); setAddNew(true); setToUpdate("false"); }}><img src={SAPIBase+`/defaultThumb/Add.png`}/></div>
+                </div></div>:<div className={"Art_item_plus"} onClick={(e) => { setGivenTitle(""); setGivenContent(""); setAddNew(true); setToUpdate("false"); }}><img src={SAPIBase+`/defaultThumb/Add.png`}/></div>
                 }
                 
             </div>

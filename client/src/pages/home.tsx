@@ -26,7 +26,7 @@ const HomePage = (props: {}) => {
     <div className={"home"}>
       <div className={"home-banner"}>
         <div className={"sparcs-logo-wrapper"}>
-          <span className={"sparcs-logo"}>SPARCS</span> Backend Seminar
+          <span className={"sparcs-logo"}>SPARCS</span> Newbie Project
         </div>
       </div>
       <div className={"link-wrapper"}>
@@ -34,14 +34,6 @@ const HomePage = (props: {}) => {
           <div className={"page-link"} onClick={ () => navigate("/arcive") }>
             <div className={"page-subtitle"}>Example #1</div>
             <div className={"page-title"}>Artwork Arcive Login & Gallery</div>
-          </div>
-          <div className={"page-link"} onClick={ () => navigate("/whatToDo") }>
-            <div className={"page-subtitle"}>Example #2</div>
-            <div className={"page-title"}>Middleware & Authorization</div>
-          </div>
-          <div className={"page-link"} onClick={ () => navigate("/cat-image") }>
-            <div className={"page-subtitle"}>Example #3</div>
-            <div className={"page-title"}>Serve *Cute* Image Files</div>
           </div>
           <div className={"page-link"} onClick={ () => navigate("/register") }>
             <div className={"page-subtitle"}>Example #4</div>
