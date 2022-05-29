@@ -26,7 +26,8 @@ const HomePage = (props: {}) => {
     <div className={"home"}>
       <div className={"home-banner"}>
         <div className={"sparcs-logo-wrapper"}>
-          <span className={"sparcs-logo"}>SPARCS</span> Newbie Project
+          <span className={"sparcs-logo"}>SPARCS</span> Newbie Project by Miru
+          <div>ArtWork Archiving Service</div>
         </div>
       </div>
       <div className={"link-wrapper"}>
