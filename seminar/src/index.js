@@ -6,9 +6,6 @@ const fs = require('fs');
 require('dotenv').config();
 
 const statusRouter = require('./routes/status');
-const feedRouter = require('./routes/feed');
-const accountRouter = require('./routes/account');
-const ssrRouter = require('./routes/ssr');
 const arciveRouter = require('./routes/arcive');
 const registerRouter = require('./routes/register');
 
@@ -31,13 +28,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use('/status', statusRouter);
-app.use('/feed', feedRouter);
-app.use('/account', accountRouter);
-app.use('/ssr', ssrRouter);
 app.use('/arcive', arciveRouter);
 app.use('/register', registerRouter);
 
-app.use('/static', express.static(path.join(__dirname,'public')));
 app.use('/ArtDB', express.static(path.join(__dirname, '../uploadedFiles')));
 app.use('/defaultThumb', express.static(path.join(__dirname, '../SystemImage')));
 

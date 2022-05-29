@@ -32,11 +32,11 @@ const HomePage = (props: {}) => {
       <div className={"link-wrapper"}>
         <div className={"link-options"}>
           <div className={"page-link"} onClick={ () => navigate("/arcive") }>
-            <div className={"page-subtitle"}>Example #1</div>
+            <div className={"page-subtitle"}>Service #1</div>
             <div className={"page-title"}>Artwork Arcive Login & Gallery</div>
           </div>
           <div className={"page-link"} onClick={ () => navigate("/register") }>
-            <div className={"page-subtitle"}>Example #4</div>
+            <div className={"page-subtitle"}>Service #2</div>
             <div className={"page-title"}>Registration page</div>
           </div>
         </div>

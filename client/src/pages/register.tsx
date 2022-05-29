@@ -1,25 +1,23 @@
 import React from "react";
-import Header from "../components/header";
 import axios from "axios";
 import {SAPIBase} from "../tools/api";
 
 const RegisterPage = () => {
     const [ GivenID, setGivenID ] = React.useState<string>("");
     const [ GivenPW, setGivenPW ] = React.useState<string>("");
-    const [ DoneLogin, setDoneLogin ] = React.useState<boolean>(false);
-    const [ UserID, setUserID ] = React.useState<string>("");
-    const [ UserPW, setUserPW ] = React.useState<string>("");
 
     const AddRegistration = async () => {
         try{
             const { data } = await axios.get<boolean>( SAPIBase + `/register/searchID?userID=${ GivenID }`);
             if(data) {
+                window.alert(`User ID already existing. Please try another one.`);
                 console.log("User ID already existing. Please try another one.");
                 return false;
             } else {
                 if(GivenID === ""){ console.log("Please Enter ID"); return false;}
                 else{
                 axios.post( SAPIBase + '/register/addAccount' , {id: GivenID, pw: GivenPW});
+                window.alert(`Available ID, Registration Complete. Welcome user ${GivenID}`);
                 console.log(`Available ID, Registration Complete. Welcome user ${GivenID}`);
                 setGivenID("");
                 setGivenPW("");
@@ -29,6 +27,7 @@ const RegisterPage = () => {
             }
             catch {
                 axios.post( SAPIBase + '/register/addAccount' , {id: GivenID, pw: GivenPW});
+                window.alert(`Available ID, Registration Complete. Welcome user ${GivenID}`);
                 console.log(`Available ID, Registration Complete. Welcome user ${GivenID}`);
                 setGivenID("");
                 setGivenPW("");
@@ -41,11 +40,13 @@ const RegisterPage = () => {
             const { data } = await axios.get<boolean>( SAPIBase + `/register/login?userID=${ GivenID }&userPW=${ GivenPW }`);
             if(data) {
                 axios.post( SAPIBase + '/register/deleteAccount' , {id: GivenID, pw: GivenPW});
+                window.alert(`Account Delete Complete. GoodBye user ${GivenID}`);
                 console.log(`Account Delete Complete. GoodBye user ${GivenID}`);
                 setGivenID("");
                 setGivenPW("");
                 return true;
             } else {
+                window.alert(`Given ID and PW does not login. Please try again.`);
                 console.log("Given ID and PW does not login. Please try again.");
                 return false;
             }

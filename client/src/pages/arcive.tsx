@@ -51,11 +51,13 @@ const ArcivePage = (proprs: {}) => {
             setDoneLogin(true);
             return true;
         } else {
+            window.alert("Login Failed. Please try again.");
             console.log("Login failed.");
             return false;
         }
         }
         catch {
+            window.alert("Login Failed. Please try again.");
             console.log("Login Failed. Please Try Again.");
         }
     }
