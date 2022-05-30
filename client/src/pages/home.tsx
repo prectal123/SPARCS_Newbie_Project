@@ -20,11 +20,12 @@ const HomePage = (props: {}) => {
     }
     asyncFun().catch((e) => setBServerConnected(false));
   }, 5000);
-
+ 
 
   return (
     <div className={"home"}>
       <div className={"home-banner"}>
+      <img src={SAPIBase+`/defaultThumb/MainerIcon.png`} height={"200px"} width={"200px"}/>
         <div className={"sparcs-logo-wrapper"}>
           <span className={"sparcs-logo"}>SPARCS</span> Newbie Project by Miru
           <div>ArtWork Archiving Service</div>
@@ -33,11 +34,9 @@ const HomePage = (props: {}) => {
       <div className={"link-wrapper"}>
         <div className={"link-options"}>
           <div className={"page-link"} onClick={ () => navigate("/arcive") }>
-            <div className={"page-subtitle"}>Service #1</div>
             <div className={"page-title"}>Artwork Arcive Login & Gallery</div>
           </div>
           <div className={"page-link"} onClick={ () => navigate("/register") }>
-            <div className={"page-subtitle"}>Service #2</div>
             <div className={"page-title"}>Registration page</div>
           </div>
         </div>
