@@ -2,6 +2,7 @@
 Repository for Node / Express Seminar @ SPARCS
 
 Skeleton Code by [Jiho Park](https://github.com/UrWrstNightmare) (Night @ SPARCS) - https://github.com/UrWrstNightmare/sparcs-node-express-seminar
+
 Detailed Code by [Hajun Chang]
 
 Structure
