@@ -1,13 +1,12 @@
 # SPARCS Node.js & Express (Backend) Seminar
 Repository for Node / Express Seminar @ SPARCS
 
-Code by [Jiho Park](https://github.com/UrWrstNightmare) (Night @ SPARCS)
+Skeleton Code by [Jiho Park](https://github.com/UrWrstNightmare) (Night @ SPARCS) - https://github.com/UrWrstNightmare/sparcs-node-express-seminar
 
+Detailed Code by [Hajun Chang]
+
+Structure
 ---
 ### Folder Structure
-|- client :  Example client for seminar\
-|- seminar:  Files used in seminar\
-|- homework : Homework Directory
-
-
-### How to Run
+|- client :  Front End Code\
+|- seminar:  Back End, DB Code\
