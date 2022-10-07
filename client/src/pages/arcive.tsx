@@ -76,7 +76,7 @@ const ArcivePage = (proprs: {}) => {
         formData.append("IsUpdate", ToUpdate);
         formData.append("Author", GivenId);
         let Data_OB = new Date();
-        formData.append("Dated", `${Data_OB.getFullYear()}년 ${Data_OB.getMonth() + 1}월 ${Data_OB.getDay()}일 ${Data_OB.getHours()}:${Data_OB.getMinutes()}:${Data_OB.getSeconds()}`)
+        formData.append("Dated", `${Data_OB.getFullYear()}년 ${Data_OB.getMonth() + 1}월 ${Data_OB.getDate()}일 ${Data_OB.getHours()}:${Data_OB.getMinutes()}:${Data_OB.getSeconds()}`)
         setToUpdate("false");
         setGivenTitle("");
         setGivenContent("");
@@ -107,6 +107,10 @@ const ArcivePage = (proprs: {}) => {
             link.click();
         });
         return;
+    }
+
+    const EnterKeyPress = (e : React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.key === 'Enter') Login();
     }
 
     const ArciveLoad = () => {
@@ -201,7 +205,7 @@ const ArcivePage = (proprs: {}) => {
                 </div>
                 <br/>
                 <div className={"Part_input"}>
-                    비밀번호: <input type={"password"} value={GivenPw} onChange = { (e) => setGivenPw(e.target.value) } />
+                    비밀번호: <input type={"password"} value={GivenPw} onChange = { (e) => setGivenPw(e.target.value) } onKeyPress = {EnterKeyPress} />
                 </div>
                 <div className={"Login_Button"} onClick={ (e) => Login() }>Login</div>
             </div>

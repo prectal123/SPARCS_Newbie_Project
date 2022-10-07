@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useNavigate }  from "react-router-dom";
 import { useInterval } from "../tools/interval";
 import "./css/home.css";
 import { SAPIBase } from "../tools/api";
-
+import { io } from "socket.io-client";
 
 const HomePage = (props: {}) => {
   const navigate = useNavigate();
@@ -20,7 +20,18 @@ const HomePage = (props: {}) => {
     }
     asyncFun().catch((e) => setBServerConnected(false));
   }, 5000);
- 
+  
+  useEffect(()=>{
+    const socket = io(SAPIBase, {
+      transports : ["websocket"]
+    });
+    console.log("SOOOOOOCLKKKKET");
+    socket.emit("connection", "good");
+
+    socket.on("client_recieve", (i : string) => {
+      console.log(i);
+    })
+  },[])
 
   return (
     <div className={"home"}>

@@ -4,11 +4,12 @@ const path = require('path');
 const mongoose = require('mongoose');
 const fs = require('fs');
 require('dotenv').config();
+const Socket = require("Socket.io");
+const http = require("http");
 
 const statusRouter = require('./routes/status');
 const arciveRouter = require('./routes/arcive');
 const registerRouter = require('./routes/register');
-
 
 const app = express();
 const port = process.env.PORT;
@@ -41,14 +42,21 @@ mongoose.connect(process.env.MONGO_URI, OMongooseOption).then(
     (err) => { console.log(`[Mongoose] Connection Error: ${ err }`) }
 );
 
-
 var dir = './uploadedFiles';
 fs.access(dir, (error) => {
         console.log(error)
         if(error) {fs.mkdirSync(dir); console.log("Directory Created");}
 })
+//Connect webSockets
+const server = http.createServer(app);
+const io = Socket(server);
 
-app.listen(port, async () => {
+io.on("connection", (socket) => {
+    console.log("Bleh");
+    socket.emit("client_recieve", "nice");
+})
+
+server.listen(port, async () => {
    console.log(`Example App Listening @ http://localhost:${ port }`);
    //if (!fs.existsSync(dir, (str)=>{console.log()})) fs.mkdirSync(dir); // 2
 
